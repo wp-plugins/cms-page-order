@@ -1,0 +1,60 @@
+# Copyright (C) 2010 CMS Page Order
+# This file is distributed under the same license as the CMS Page Order package.
+msgid ""
+msgstr ""
+"Project-Id-Version: CMS Page Order 0.1b\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/cms-page-order\n"
+"POT-Creation-Date: 2011-04-05 08:54:52+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Tobias Bergius <bergius.tobias@gmail.com>\n"
+
+#. #-#-#-#-#  cms-page-order.pot (CMS Page Order 0.1b)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: cms-page-order.php:46 cms-page-order.php:149
+msgid "Page Order"
+msgstr "Sidordning"
+
+#: cms-page-order.php:49
+msgid "Rearrange the pages by dragging and dropping."
+msgstr "Ordna sidorna genom att klicka och dra."
+
+#: cms-page-order.php:51
+msgid "You can have one submenu."
+msgid_plural "You can have %d sets of submenus."
+msgstr[0] "Du kan ordna sidorna i en (1) undermeny."
+msgstr[1] "Du kan ordna sidorna i %d undermenyer."
+
+#: cms-page-order.php:66
+msgid "Expand all"
+msgstr "Veckla ut alla"
+
+#: cms-page-order.php:67
+msgid "Collapse all"
+msgstr "Veckla in alla"
+
+#: cms-page-order.php:296
+msgid "! %s is editing this page. Page order might be overwritten."
+msgstr "! %s redigerar den här sidan. Sidordningen kan skrivas över."
+
+#: cms-page-order.php:301
+msgid "Password protected"
+msgstr "Lösenordsskyddad"
+
+#: cms-page-order.php:317
+msgid "Scheduled"
+msgstr "Schemalagd"
+
+#: cms-page-order.php:327
+msgid "Make page public"
+msgstr "Gör publik"
+
+#: cms-page-order.php:329
+msgid "Publish page"
+msgstr "Publicera sidan"
+
+#. Description of the plugin/theme
+msgid "Change the page order with quick and easy drag and drop."
+msgstr "Ordna dina sidor snabbt och enkelt genom att klicka och dra."

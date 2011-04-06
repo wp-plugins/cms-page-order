@@ -1,0 +1,61 @@
+# Copyright (C) 2010 CMS Page Order
+# This file is distributed under the same license as the CMS Page Order package.
+msgid ""
+msgstr ""
+"Project-Id-Version: CMS Page Order 0.1b\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/cms-page-order\n"
+"POT-Creation-Date: 2011-04-05 08:54:52+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. #-#-#-#-#  cms-page-order.pot (CMS Page Order 0.1b)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: cms-page-order.php:46 cms-page-order.php:149
+msgid "Page Order"
+msgstr ""
+
+#: cms-page-order.php:49
+msgid "Rearrange the pages by dragging and dropping."
+msgstr ""
+
+#: cms-page-order.php:51
+msgid "You can have one submenu."
+msgid_plural "You can have %d sets of submenus."
+msgstr[0] ""
+msgstr[1] ""
+
+#: cms-page-order.php:66
+msgid "Expand all"
+msgstr ""
+
+#: cms-page-order.php:67
+msgid "Collapse all"
+msgstr ""
+
+#: cms-page-order.php:296
+msgid "! %s is editing this page. Page order might be overwritten."
+msgstr ""
+
+#: cms-page-order.php:301
+msgid "Password protected"
+msgstr ""
+
+#: cms-page-order.php:317
+msgid "Scheduled"
+msgstr ""
+
+#: cms-page-order.php:327
+msgid "Make page public"
+msgstr ""
+
+#: cms-page-order.php:329
+msgid "Publish page"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Change the page order with quick and easy drag and drop."
+msgstr ""
