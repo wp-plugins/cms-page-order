@@ -1,66 +1,55 @@
 jQuery(document).ready(function($) {
-	
+
 	// Initialize the sortable
 	$('.cmspo-sortable').nestedSortable({
+		tabSize: 16,
+		maxLevels: cmspo_maxLevels,
+		cursor: 'move',
 		forcePlaceholderSize: true,
 		handle: 'div',
 		helper:	'clone',
 		items: 'li',
 		opacity: .6,
 		placeholder: 'placeholder',
-		tabSize: 18,
+		revert: 80,
 		tolerance: 'pointer',
 		toleranceElement: '> div',
-		cursor: 'move',
-		maxLevels: cmspo_maxLevels,
-		revert: 80,
-		update: function(event, ui) { saveTree(event, ui); }
-	});
-	
-	// Save changes
-	function saveTree(event, ui) {
-		if ( typeof ui !== 'undefined' ) {
+		update: function(event, ui) {
 			$(ui.item).find('div').addClass('loading');
-			order_data = $('.cmspo-sortable').nestedSortable('toArray');
-			
-			children = $(ui.item).parent('ol').children('li').length;
-			$(ui.item).parent('ol').parent('li').children('.cmspo-page').children('.cmspo-count').text( '('+ children +')' );
+			saveTree(ui);
 		}
-		else
-			order_data = '';
+	});
+
+	// Save changes
+	function saveTree(ui) {
+		if ( typeof ui != 'undefined' && typeof ui !== 'undefined' )
+			var order = $('.cmspo-sortable').nestedSortable('toArray');
 		
-		state_data = new Array();
+		var state = new Array();
 		$.each( $('#cmspo-pages li ol:visible'), function() {
-			if ( $(this).children('li').length ) {
-				state_data.push( $(this).parent('li').attr('id').substr(5) );
+			var li = $(this).parent('li');
+			if ( li.children('ol').children('li').length ) {
+				state.push( get_id(li.attr('id')) );
 			}
 		});
 		
-		url = ajaxurl + '?action=save_tree&_ajax_nonce=' + _cmspo_ajax_nonce;
-		$.ajax({
-			type: 'POST',
-			url: url,
-			data: {
-				order: order_data,
-				open: state_data
-			},
-			success: function(data) {
+		var url = ajaxurl + '?action=save_tree&_ajax_nonce=' + _cmspo_ajax_nonce;
+		$.post(url, { order: order, open: state }, function(data) {
 				if ( typeof ui !== 'undefined' )
 					$(ui.item).find('div').removeClass('loading');
 				prependToggle();
 			}
-		});
-
+		);
 	}
 	
 	// Remove labels
 	$('.cmspo-state a').click(function() {
-		label = $(this).parent();	
+		var label = $(this).parent();	
 		$(label).parent().addClass('loading');
-		url = ajaxurl + $(this).attr('href');
+		
 		$.ajax({
+			url: ajaxurl + $(this).attr('href'), 
 			type: 'POST',
-			url: url,
 			success: function(data, e) {
 				$(label).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).delay(180).animate({width:'toggle'}, 100);
 				$(label).parent().removeClass('loading');
@@ -70,83 +59,77 @@ jQuery(document).ready(function($) {
 				$(label).animate({left: '-9px'}, 90)
 								.animate({left: '9px'}, 90)
 								.animate({left: '0'}, 80);
-			}
+				}
 		});
+
 		return false;
 	});
-	
+
 	// Prepend toggle button
-	function prependToggle() {
+	function prependToggle(init) {
+		var submenus = null;
 		$.each($('#cmspo-pages li'), function() {
-			if ( $(this).children('div').children('.cmspo-toggle').length == 0 ) {				
-				if ( $(this).children('ol').children('li').length > 0 ) {
-					$(this).children('div').prepend('<span class="cmspo-toggle"><span></span></span>');
-					$(this).children('div').find('.cmspo-toggle').click(function() {
-							li = $(this).parent('div').parent('li');
-							ol = li.children('ol');
-							
-							if ( ol.hasClass('cmspo-closed') || ol.css('display') == 'none' ) {
-								expand(ol);
-							} 
-							else if ( ol.hasClass('cmspo-open') || ol.css('display') == 'block' ) {
-								collapse(ol);
-							}
-					});
+			var children = $(this).children('ol').children('li');
+			var div = $(this).children('div');
+			
+			if ( children.length > 0 ) {
+				submenus += 1;
+				if ( div.children('.cmspo-toggle').length == 0 ) {
+					div.prepend('<span class="cmspo-toggle"><span></span></span>');
+
+					var li = div.parent('li');
+					if ( !li.hasClass('cmspo-closed') )
+						li.addClass('cmspo-open');
+				
+					div.children('.cmspo-toggle').click(function() {
+						var li = $(this).parent('div').parent('li');
+						li.children('ol').slideToggle(80, function() { li.toggleClass('cmspo-open cmspo-closed'); saveTree(); });
+					});	
 				}
 			}
-			else {
-				if ( $(this).children('ol').children('li').length == 0 )	{
-					$(this).children('div').find('.cmspo-toggle').remove();
-				}
-			}
+			else if ( children.length == 0 && div.children('.cmspo-toggle').length > 0 )
+				div.children('.cmspo-toggle').remove();
+
+			var count = div.children('.cmspo-count');
+			if ( count.text() != children.length )
+				count.text(' (' + children.length + ')');
 		});
-		
-		childrens = $('#cmspo-pages li ol').has('li').length;
-		
-		if ( $('.cmspo-depth').length ) {
-			div = $('.cmspo-depth');
-			if (childrens == 0) {
-				div.slideUp(400);
-			} else {
-				div.slideDown(400);
-			}
-		} else {
-			if (childrens > 1) {
+		if ( submenus > 1 ) {
+			if ( $('.cmspo-collapse').length == 0 ) {
 				$('.cmspo-actions').prepend('<div class="cmspo-depth"></div>');
-				div = $('.cmspo-depth');
-				div.hide();
-				div.append('<a href="#" class="cmspo-collapse">'+cmspo.Collapse_all+'</a>', ' | <a href="#" class="cmspo-expand">'+cmspo.Expand_all+'</a>');
-				$('.cmspo-expand').click(function() {
-					expand( $('.cmspo-closed ol') );
+				var div = $('.cmspo-depth');
+				div.hide().append('<a href="#" class="cmspo-collapse">'+cmspo.Collapse_all+'</a>', ' | <a href="#" class="cmspo-expand">'+cmspo.Expand_all+'</a>');
+				
+				init ? div.show() : div.slideDown();
+				
+				$('.cmspo-depth a').click(function(event) {
+					if ( $(this).hasClass('cmspo-expand') ) 
+						ol = $('#cmspo-pages ol:hidden');
+					else if ( $(this).hasClass('cmspo-collapse') )
+						ol = $('#cmspo-pages ol:visible');
+
+					var i = ol.length;
+					ol.slideToggle(100, function() {
+						$(this).parent('li').toggleClass('cmspo-open cmspo-closed');
+						i-=1;
+						i == 0 ? saveTree() : '';
+					});
 					return false;
 				});
-				$('.cmspo-collapse').click(function() {
-					collapse( $('#cmspo-pages ol').has('li:not(.cmspo-closed)') );
-					return false;
-				});
-				div.show();
+
+			} else {
+				$('.cmspo-depth').slideDown(400);
 			}
 		}
-		
+		else if ( submenus < 1  && $('.cmspo-collapse:visible').length != 0 ) {
+			var div = $('.cmspo-depth');
+			div.slideUp(400);
+		}
 	}
-	prependToggle();
+	prependToggle(1);
 
-	// Toggle functions
-	function expand(ol) {
-		li = ol.parent('li');
-		ol.slideDown(100, function() {
-			li.removeClass('cmspo-closed');
-			li.addClass('cmspo-open');
-		});
-		saveTree();
+	function get_id(str) {
+		return str.substr(5);
 	}
-	function collapse(ol) {
-		li = ol.parent('li');
-		ol.slideUp(100, function() {
-			li.removeClass('cmspo-open');
-			li.addClass('cmspo-closed');
-			saveTree();
-		});
-	}
-	
+
 });

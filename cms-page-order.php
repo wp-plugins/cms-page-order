@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.1b
+Version: 0.1
 Author: Tobias Bergius
 Author URI: http://tobiasbergius.se/
 License: Public Domain
@@ -28,10 +28,11 @@ License: Public Domain
  * - Dropdown for post states (set as another state)
  * - Check conflicts on each update
  * – Set admin notice on update?
+ * – Make images into sprites
  *
 */
 
-define( 'CMSPO_VERSION', '0.1b' );
+define( 'CMSPO_VERSION', '0.1' );
 define( 'CMSPO_URL', WP_PLUGIN_URL . '/cms-page-order/' );
 
 add_action( 'wp_ajax_save_tree', 'cmspo_ajax_save_tree' );
@@ -103,8 +104,7 @@ function cmspo_ajax_save_tree() {
 		
 	if ( isset($_REQUEST['open']) ) {
 		$user = wp_get_current_user();
-		update_user_option( $user->ID, 'cmspo_tree_state', $_REQUEST['open'] );
-		print_r (cmspo_get_user_option( 'cmspo_tree_state' ));
+		update_user_option( $user->ID, 'cmspo_tree_state', $_REQUEST['open'] );		
 	}
 	
 	if ( !empty($_REQUEST['order']) ) {
@@ -118,11 +118,10 @@ function cmspo_ajax_save_tree() {
 			$wpdb->update( $wpdb->posts, $data, $where );
 		}
 	}
-	
 	die();
 }
+
 function cmspo_ajax_remove_label() {
-	
 	if ( !check_ajax_referer( 'cms-page-order', false, false ) || (empty($_REQUEST['post']) && !(int)$_REQUEST['post'] && empty($_REQUEST['state'])) )
 		cmspo_do_err();
 		
@@ -133,11 +132,9 @@ function cmspo_ajax_remove_label() {
 		
 	if ( in_array( $state, $not_published ) ) {
 		wp_publish_post($post);
-		echo 'published';
 	}
 	elseif ( $state == 'password' ) {
 		wp_update_post( array( 'ID' => $post, 'post_password' => '' ) );
-		echo 'public';
 	}
 	die();
 }
@@ -168,7 +165,6 @@ function cmspo_menu_order_page() { ?>
 			<div class="cmspo-actions">
 			</div>
 		</div>
-		<?php cmspo_post_statuses(); ?>
 		<?php if ( $pages = cmspo_list_pages() ) : ?>
 		<ol id="cmspo-pages" class="cmspo-sortable">
 			<?php echo $pages ?>
@@ -251,7 +247,6 @@ function cmspo_list_pages($args = null, $count = false) {
 }
 
 function cmspo_has_children($page_id) {
-	// no array in post_status until 3.2
 	$args = array(
 		'post_parent' => $page_id
 	);
@@ -275,11 +270,11 @@ function cmspo_do_err() {
 class PO_Walker extends Walker_Page {
 	function start_lvl(&$output, $depth) {
 		$indent = str_repeat("\t", $depth);
-		$output .= "\n".$indent.'<ol class="cmspo-children">'."\n";
+		$output .= '<ol class="cmspo-children">';
 	}
 	function end_lvl(&$output, $depth) {
 		$indent = str_repeat("\t", $depth);
-		$output .= "$indent</ol>\n";
+		$output .= "</ol>";
 	}
 	function start_el(&$output, $page, $depth, $args) {
 		if ( $depth )
@@ -341,13 +336,15 @@ class PO_Walker extends Walker_Page {
 
 				$state_labels .= '<span class="cmspo-state '.$state.'">'.$state_name.' '.$action.'</span> ';
 		}
-		
+
 		if ( $children_count = cmspo_has_children($page->ID) ) {
 			$children_count = ' <span class="cmspo-count">('.$children_count.')</span>';
+			
 			if ( ($state = cmspo_get_user_option( 'cmspo_tree_state' ) ) && in_array( $page->ID, $state ) )
 				$output .= $indent . '<li id="page-'.$page->ID.'" class="cmspo-open">';
 			else
 				$output .= $indent . '<li id="page-'.$page->ID.'" class="cmspo-closed">';
+				
 		} else {
 			$output .= $indent . '<li id="page-'.$page->ID.'">';
 			$children_count = ' <span class="cmspo-count"></span>';
@@ -369,6 +366,9 @@ class PO_Walker extends Walker_Page {
 		$output .= 		'</span>'
 								.'</div>';
 
+	}
+	function end_el(&$output, $page, $depth) {
+		$output .= "</li>";
 	}
 }
 

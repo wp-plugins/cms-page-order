@@ -3,8 +3,8 @@ Contributors: bergius
 Donate link: http://goo.gl/CbIp5
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrage, reorder, management, manage, admin
 Requires at least: 3.1
-Tested up to: 3.1
-Stable tag: 0.1b
+Tested up to: 3.1.1
+Stable tag: 0.1
 
 Change the page order with quick and easy drag and drop.
 
@@ -25,7 +25,6 @@ For theme developers, there's a filter hook that lets you set the maximum number
 * [WPML](http://wordpress.org/extend/plugins/sitepress-multilingual-cms/) support
 
 #### Translations
-The following languages are available.
 
 * English
 * Swedish
@@ -43,5 +42,14 @@ The following languages are available.
 
 == Changelog ==
 
+= 0.1 =
+* Some functions rewritten
+* Updated nestedSortable from 1.3.1 to 1.3.2
+* Bug fixes
+
 = 0.1b =
 * First release.
+
+== Localization ==
+
+Want to contribute with a translation to your language? Contact me at cmspageorder@gmail.com.

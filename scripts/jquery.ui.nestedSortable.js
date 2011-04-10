@@ -1,6 +1,6 @@
 /*
  * jQuery UI Nested Sortable
- * v 1.3.1 / 3 apr 2011
+ * v 1.3.2 / 9 apr 2011
  * http://mjsarfatti.com/sandbox/nestedSortable
  *
  * Depends:
@@ -139,25 +139,15 @@
 			}
 			// If the item is below another one and is moved to the right, make it a children of it
 			else if (previousItem != null && this.positionAbs.left > previousItem.offset().left + o.tabSize) {
+				this._isAllowed(previousItem, level+childLevels+1);
 				if (previousItem[0].children[1] == null) {
 					previousItem[0].appendChild(newList);
 				}
 				previousItem[0].children[1].appendChild(this.placeholder[0]);
 				this._trigger("change", event, this._uiHash());
 			}
-
-			// Are we trying to nest under a no-nest or are we nesting too deep?
-			if (parentItem == null || !(parentItem.hasClass(o.disableNesting))) {
-				if (o.maxLevels < level+childLevels && o.maxLevels != 0) {
-					this.placeholder.addClass(o.errorClass);
-					this.beyondMaxLevels = level+childLevels - o.maxLevels;
-				} else {
-					this.placeholder.removeClass(o.errorClass);
-					this.beyondMaxLevels = 0;
-				}
-			} else {
-				this.placeholder.addClass(o.errorClass);
-				this.beyondMaxLevels = (level+childLevels - o.maxLevels) > 0 ? level+childLevels - o.maxLevels : 1;
+			else {
+				this._isAllowed(parentItem, level+childLevels);
 			}
 
 			//Post events to containers
@@ -329,6 +319,23 @@
 				levels = item.find(this.options.items).filter(this.options.items+':first-child').length;
 
 				return levels;
+		},
+
+		_isAllowed: function(parentItem, levels) {
+			var o = this.options
+			// Are we trying to nest under a no-nest or are we nesting too deep?
+			if (parentItem == null || !(parentItem.hasClass(o.disableNesting))) {
+				if (o.maxLevels < levels && o.maxLevels != 0) {
+					this.placeholder.addClass(o.errorClass);
+					this.beyondMaxLevels = levels - o.maxLevels;
+				} else {
+					this.placeholder.removeClass(o.errorClass);
+					this.beyondMaxLevels = 0;
+				}
+			} else {
+				this.placeholder.addClass(o.errorClass);
+				this.beyondMaxLevels = (levels - o.maxLevels) > 0 ? levels - o.maxLevels : 1;
+			}
 		}
 
 	}));
