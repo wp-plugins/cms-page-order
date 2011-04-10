@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the CMS Page Order package.
 msgid ""
 msgstr ""
-"Project-Id-Version: CMS Page Order 0.1b\n"
+"Project-Id-Version: CMS Page Order\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/cms-page-order\n"
-"POT-Creation-Date: 2011-04-05 08:54:52+00:00\n"
+"POT-Creation-Date: 2011-04-10 12:46:30+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,48 +12,54 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#. #-#-#-#-#  cms-page-order.pot (CMS Page Order 0.1b)  #-#-#-#-#
-#. Plugin Name of the plugin/theme
-#: cms-page-order.php:46 cms-page-order.php:149
+#: cms-page-order.php:48 cms-page-order.php:147
 msgid "Page Order"
 msgstr ""
 
-#: cms-page-order.php:49
+#: cms-page-order.php:51
 msgid "Rearrange the pages by dragging and dropping."
 msgstr ""
 
-#: cms-page-order.php:51
+#: cms-page-order.php:53
 msgid "You can have one submenu."
 msgid_plural "You can have %d sets of submenus."
 msgstr[0] ""
 msgstr[1] ""
 
-#: cms-page-order.php:66
+#: cms-page-order.php:68
 msgid "Expand all"
 msgstr ""
 
-#: cms-page-order.php:67
+#: cms-page-order.php:69
 msgid "Collapse all"
 msgstr ""
 
-#: cms-page-order.php:296
+#: cms-page-order.php:173
+msgid "No pages found."
+msgstr ""
+
+#: cms-page-order.php:292
 msgid "! %s is editing this page. Page order might be overwritten."
 msgstr ""
 
-#: cms-page-order.php:301
+#: cms-page-order.php:297
 msgid "Password protected"
 msgstr ""
 
-#: cms-page-order.php:317
+#: cms-page-order.php:313
 msgid "Scheduled"
 msgstr ""
 
-#: cms-page-order.php:327
+#: cms-page-order.php:323
 msgid "Make page public"
 msgstr ""
 
-#: cms-page-order.php:329
+#: cms-page-order.php:325
 msgid "Publish page"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "CMS Page Order"
 msgstr ""
 
 #. Description of the plugin/theme
