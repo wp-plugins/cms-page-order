@@ -27,8 +27,7 @@ License: Public Domain
  *
  * - Dropdown for post states (set as another state)
  * - Check conflicts on each update
- * – Set admin notice on update?
- * – Make images into sprites
+ * - Set admin notice on update?
  *
 */
 
@@ -109,14 +108,22 @@ function cmspo_ajax_save_tree() {
 	
 	if ( !empty($_REQUEST['order']) ) {
 		global $wpdb;
-		foreach ( $_REQUEST['order'] as $i => $page) {		
+		foreach ( $_REQUEST['order'] as $i => $page ) {
+			$post_id = (int) $page['item_id'];
 			if ($page['parent_id'] == 'root')
-				$page['parent_id'] = 0;
-				
-			$data = array( 'menu_order' => $i, 'post_parent' => (int) $page['parent_id'] );
-			$where = array( 'ID' => (int) $page['item_id'] );
+				$parent = 0;
+			else
+				$parent = (int) $page['parent_id'];
+			
+			$data = array( 'menu_order' => $i, 'post_parent' => $parent );
+			$where = array( 'ID' => $post_id );
+			
 			$wpdb->update( $wpdb->posts, $data, $where );
+			clean_page_cache($post_id);
+
 		}
+		global $wp_rewrite;
+		$wp_rewrite->flush_rules(false);
 	}
 	die();
 }
