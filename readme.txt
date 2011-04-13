@@ -3,8 +3,8 @@ Contributors: bergius
 Donate link: http://goo.gl/CbIp5
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrage, reorder, management, manage, admin
 Requires at least: 3.1
-Tested up to: 3.1.1
-Stable tag: 0.1
+Tested up to: 3.2
+Stable tag: 0.1.1
 
 Change the page order with quick and easy drag and drop.
 
@@ -41,6 +41,10 @@ For theme developers, there's a filter hook that lets you set the maximum number
 3. Post status labels with support for custom statuses.
 
 == Changelog ==
+
+= 0.1.1 =
+* Fixes a problem with permalinks not updating
+* Updated nestedSotrtable from 1.3.2 to 1.3.3
 
 = 0.1 =
 * Some functions rewritten

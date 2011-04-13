@@ -42,7 +42,7 @@
 	margin-top: 12px;
 	margin-left: -1px;
 	z-index: 9;
-	clear: both;
+	clear: both;	
 }
 #cmspo-pages li:last-child:after, #cmspo-pages > li:first-child:after {
 	position: absolute;
@@ -67,6 +67,7 @@
 	font-size: 11px;
 	z-index: 1;
 }
+
 .cmspo-page-actions .cmspo-delete { color: #BC0B0B !important; }
 .cmspo-page-actions .cmspo-delete:hover { color: #f00 !important; }
 .cmspo-state a {
