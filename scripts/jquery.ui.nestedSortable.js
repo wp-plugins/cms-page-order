@@ -1,6 +1,6 @@
 /*
  * jQuery UI Nested Sortable
- * v 1.3.2 / 9 apr 2011
+ * v 1.3.3 / 12 apr 2011
  * http://mjsarfatti.com/sandbox/nestedSortable
  *
  * Depends:
@@ -115,9 +115,9 @@
 			var parentItem = (this.placeholder[0].parentNode.parentNode && $(this.placeholder[0].parentNode.parentNode).closest('.ui-sortable').length) ? $(this.placeholder[0].parentNode.parentNode) : null;
 			var level = this._getLevel(this.placeholder);
 			var childLevels = this._getChildLevels(this.helper);
-			var previousItem = (this.placeholder[0].previousSibling && this.placeholder[0].previousSibling.nodeName == 'LI') ? $(this.placeholder[0].previousSibling) : null;
+			var previousItem = this.placeholder[0].previousSibling ? $(this.placeholder[0].previousSibling) : null;
 			if (previousItem != null) {
-				while (previousItem[0].nodeType != 1 || previousItem[0] == this.currentItem[0]) {
+				while (previousItem[0].nodeName.toLowerCase() != 'li' || previousItem[0] == this.currentItem[0]) {
 					if (previousItem[0].previousSibling) {
 						previousItem = $(previousItem[0].previousSibling);
 					} else {
