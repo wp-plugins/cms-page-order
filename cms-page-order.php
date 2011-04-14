@@ -108,19 +108,36 @@ function cmspo_ajax_save_tree() {
 	
 	if ( !empty($_REQUEST['order']) ) {
 		global $wpdb;
+		unset( $_REQUEST['order'][0] );
+
+		$prev_depth = 1;
+		$order = array();
+		$order[1] = 1;
+		
 		foreach ( $_REQUEST['order'] as $i => $page ) {
+			
 			$post_id = (int) $page['item_id'];
 			if ($page['parent_id'] == 'root')
 				$parent = 0;
 			else
 				$parent = (int) $page['parent_id'];
+
+			if ( $page['depth'] > $prev_depth ) {
+				$order[$page['depth']] = 1;
+				$menu_order = $order[$page['depth']];
+			}
+			else if ( $page['depth'] < $prev_depth )
+				$menu_order = $order[$page['depth']];
 			
-			$data = array( 'menu_order' => $i, 'post_parent' => $parent );
+			$prev_depth = (int) $page['depth'];
+			
+			$data = array( 'menu_order' => $order[$page['depth']], 'post_parent' => $parent );
 			$where = array( 'ID' => $post_id );
 			
 			$wpdb->update( $wpdb->posts, $data, $where );
 			clean_page_cache($post_id);
-
+			
+			$order[$page['depth']]++;
 		}
 		global $wp_rewrite;
 		$wp_rewrite->flush_rules(false);

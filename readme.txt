@@ -31,7 +31,7 @@ For theme developers, there's a filter hook that lets you set the maximum number
 
 == Installation ==
 
-1. Upload the folder `page-order` to the `/wp-content/plugins/` directory
+1. Upload the folder `cms-page-order` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Screenshots ==
