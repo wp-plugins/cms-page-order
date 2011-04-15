@@ -22,8 +22,13 @@ jQuery(document).ready(function($) {
 
 	// Save changes
 	function saveTree(ui) {
-		if ( typeof ui != 'undefined' && typeof ui !== 'undefined' )
+		if ( typeof ui != 'undefined' && typeof ui !== 'undefined' ) {
 			var order = $('.cmspo-sortable').nestedSortable('toArray');
+			for ( var key in order ) {
+				delete order[key]['left'];
+				delete order[key]['right'];
+			}
+		}
 		
 		var state = new Array();
 		$.each( $('#cmspo-pages li ol:visible'), function() {

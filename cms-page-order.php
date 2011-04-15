@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.1
+Version: 0.1.2
 Author: Tobias Bergius
 Author URI: http://tobiasbergius.se/
 License: Public Domain
@@ -22,16 +22,8 @@ License: Public Domain
 		Default: all (including custom statuses), except trash, auto-draft and inherit
 		
 */
-/*
- * Todo:
- *
- * - Dropdown for post states (set as another state)
- * - Check conflicts on each update
- * - Set admin notice on update?
- *
-*/
 
-define( 'CMSPO_VERSION', '0.1' );
+define( 'CMSPO_VERSION', '0.1.2' );
 define( 'CMSPO_URL', WP_PLUGIN_URL . '/cms-page-order/' );
 
 add_action( 'wp_ajax_save_tree', 'cmspo_ajax_save_tree' );
@@ -59,7 +51,7 @@ function cmspo_print_styles() {
 function cmspo_admin_init() {
 	wp_enqueue_script( 'jquery-ui-sortable', '', array('jquery'), false );
 	wp_enqueue_script( 'jquery-ui-effects', '', array('jquery', 'jquery-ui'), false );
-	wp_enqueue_script( 'jquery-ui-nestedsortable', CMSPO_URL . 'scripts/jquery.ui.nestedSortable.js', array('jquery', 'jquery-ui-sortable') );
+	wp_enqueue_script( 'jquery-ui-nestedsortable', CMSPO_URL . 'scripts/jquery.ui.nestedSortable-1.3.3.min.js', array('jquery', 'jquery-ui-sortable') );
 	wp_enqueue_script( 'cms-page-order', CMSPO_URL . 'scripts/cms-page-order.js', array('jquery', 'jquery-ui-sortable', 'jquery-ui-nestedsortable'), CMSPO_VERSION );
 	wp_register_style( 'cmspo_stylesheet', CMSPO_URL . 'styles/style.css', '', CMSPO_VERSION );
 	
@@ -108,22 +100,38 @@ function cmspo_ajax_save_tree() {
 	
 	if ( !empty($_REQUEST['order']) ) {
 		global $wpdb;
-		foreach ( $_REQUEST['order'] as $i => $page ) {
+		unset( $_REQUEST['order'][0] );
+
+		$prev_depth = 1;
+		$order = array();
+		$order[1] = 1;
+		
+		foreach ( $_REQUEST['order'] as $page ) {			
 			$post_id = (int) $page['item_id'];
 			if ($page['parent_id'] == 'root')
 				$parent = 0;
 			else
 				$parent = (int) $page['parent_id'];
+
+			if ( $page['depth'] > $prev_depth ) {
+				$order[$page['depth']] = 1;
+				$menu_order = $order[$page['depth']];
+			}
+			else if ( $page['depth'] < $prev_depth )
+				$menu_order = $order[$page['depth']];
 			
-			$data = array( 'menu_order' => $i, 'post_parent' => $parent );
+			$prev_depth = (int) $page['depth'];
+			
+			$data = array( 'menu_order' => $order[$page['depth']], 'post_parent' => $parent );
 			$where = array( 'ID' => $post_id );
 			
 			$wpdb->update( $wpdb->posts, $data, $where );
-			clean_page_cache($post_id);
-
+			clean_page_cache( $post_id );
+			
+			$order[$page['depth']]++;
 		}
 		global $wp_rewrite;
-		$wp_rewrite->flush_rules(false);
+		$wp_rewrite->flush_rules( false );
 	}
 	die();
 }
@@ -134,14 +142,25 @@ function cmspo_ajax_remove_label() {
 		
 	global $wpdb;
 	$state = $_REQUEST['state'];
-	$post = $_REQUEST['post'];
+	$post_id = $_REQUEST['post'];
 	$not_published = array( 'draft', 'pending', 'private', 'future' );
-		
-	if ( in_array( $state, $not_published ) ) {
-		wp_publish_post($post);
-	}
-	elseif ( $state == 'password' ) {
-		wp_update_post( array( 'ID' => $post, 'post_password' => '' ) );
+	
+	switch ( $state ) {
+		case 'future' :
+			$post_date = current_time( 'mysql' );
+			$data = array(
+					'ID' => $post_id,
+					'post_date' => current_time( 'mysql' ),
+					'post_date_gmt' => get_gmt_from_date( $post_date ),
+					'post_status' => 'publish'
+			);
+			wp_update_post( $data );
+			break;
+		case 'password' :
+			wp_update_post( array( 'ID' => $post_id, 'post_password' => '' ) );
+			break;
+		default :
+			wp_publish_post( $post_id );
 	}
 	die();
 }
@@ -277,11 +296,11 @@ function cmspo_do_err() {
 class PO_Walker extends Walker_Page {
 	function start_lvl(&$output, $depth) {
 		$indent = str_repeat("\t", $depth);
-		$output .= '<ol class="cmspo-children">';
+		$output .= "\n$indent<ol class=\"cmspo-children\">\n";
 	}
 	function end_lvl(&$output, $depth) {
 		$indent = str_repeat("\t", $depth);
-		$output .= "</ol>";
+		$output .= "$indent</ol>\n";
 	}
 	function start_el(&$output, $page, $depth, $args) {
 		if ( $depth )
@@ -322,6 +341,7 @@ class PO_Walker extends Walker_Page {
 					$page_states[$state] = ucfirst($state);
 			}
 			
+			// Set date_i18n( __( 'M j Y @ H:i' ), strtotime( $page->post_date ) ) as title on scheduled posts
 			$state_labels = null;
 			foreach ( $page_states as $state => $state_name ) {
 				$title = null;
@@ -373,9 +393,6 @@ class PO_Walker extends Walker_Page {
 		$output .= 		'</span>'
 								.'</div>';
 
-	}
-	function end_el(&$output, $page, $depth) {
-		$output .= "</li>";
 	}
 }
 
