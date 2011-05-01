@@ -12,7 +12,7 @@ Change the page order with quick and easy drag and drop.
 
 Adds the ability to rearrange the pages with drag and drop.
 
-The plugin resembles [CMS Page Tree View](http://wordpress.org/extend/plugins/cms-page-tree-view/) in many ways, but is designed to look as native as possible, to be used in client projects. There is no plugin branding or donate button. Just pure functionality.
+The plugin resembles [CMS Page Tree View](http://http://wordpress.org/extend/plugins/cms-tree-page-view/) in many ways, but is designed to look as native as possible, to be used in client projects. There is no plugin branding or donate button. Just pure functionality.
 
 For theme developers, there's a filter hook that lets you set the maximum number of levels pages can be nested in. See the PHP file for details about this.
 
