@@ -4,7 +4,7 @@ Donate link: http://goo.gl/CbIp5
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrage, reorder, management, manage, admin
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 
 Change the page order with quick and easy drag and drop.
 
@@ -12,7 +12,7 @@ Change the page order with quick and easy drag and drop.
 
 Adds the ability to rearrange the pages with drag and drop.
 
-The plugin resembles [CMS Page Tree View](http://http://wordpress.org/extend/plugins/cms-tree-page-view/) in many ways, but is designed to look as native as possible, to be used in client projects. There is no plugin branding or donate button. Just pure functionality.
+The plugin resembles [CMS Page Tree View](http://wordpress.org/extend/plugins/cms-tree-page-view/) in many ways, but is designed to look as native as possible, to be used in client projects. There is no plugin branding or donate button. Just pure functionality.
 
 For theme developers, there's a filter hook that lets you set the maximum number of levels pages can be nested in. See the PHP file for details about this.
 
@@ -42,6 +42,9 @@ For theme developers, there's a filter hook that lets you set the maximum number
 
 == Changelog ==
 
+= 0.1.3 =
+* Updated nestedSortable from 1.3.3 to 1.3.4: Fixes a problem with elements sometimes getting kicked out of the <ol>.
+
 = 0.1.2 =
 * Fixes a problem with scheduled posts not updating the date when transitioning to publish status
 * Page order number now respects depth (resets to 1 at every new level)
@@ -50,7 +53,7 @@ For theme developers, there's a filter hook that lets you set the maximum number
 
 = 0.1.1 =
 * Fixes a problem with permalinks not updating
-* Updated nestedSotrtable from 1.3.2 to 1.3.3
+* Updated nestedSortable from 1.3.2 to 1.3.3
 
 = 0.1 =
 * Some functions rewritten
