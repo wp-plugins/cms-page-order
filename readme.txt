@@ -43,7 +43,7 @@ For theme developers, there's a filter hook that lets you set the maximum number
 == Changelog ==
 
 = 0.1.3 =
-* Updated nestedSortable from 1.3.3 to 1.3.4: Fixes a problem with elements sometimes getting kicked out of the <ol>.
+* Updated nestedSortable from 1.3.3 to 1.3.4: Fixes a problem with elements sometimes getting kicked out of the ol element.
 
 = 0.1.2 =
 * Fixes a problem with scheduled posts not updating the date when transitioning to publish status
