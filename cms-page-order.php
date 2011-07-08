@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.1.3
+Version: 0.1.4
 Author: Tobias Bergius
 Author URI: http://tobiasbergius.se/
 License: Public Domain
@@ -23,7 +23,7 @@ License: Public Domain
 		
 */
 
-define( 'CMSPO_VERSION', '0.1.3' );
+define( 'CMSPO_VERSION', '0.1.4' );
 define( 'CMSPO_URL', WP_PLUGIN_URL . '/cms-page-order/' );
 
 add_action( 'wp_ajax_save_tree', 'cmspo_ajax_save_tree' );
@@ -378,7 +378,7 @@ class PO_Walker extends Walker_Page {
 		}
 
 		$output .= '<div class="cmspo-page">'
-								.$state_labels.$page->post_title
+								.$state_labels.apply_filters( 'the_title', $page->post_title, $page->ID )
 								.$children_count
 								.' <span class="cmspo-page-actions">'
 									.'<a class="cmspo-edit" href="'.get_permalink( $page->ID ).'">'.__( 'View' ).'</a>';
