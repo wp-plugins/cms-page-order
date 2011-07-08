@@ -4,7 +4,7 @@ Donate link: http://goo.gl/CbIp5
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrage, reorder, management, manage, admin
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 0.1.3
+Stable tag: 0.2
 
 Change the page order with quick and easy drag and drop.
 
