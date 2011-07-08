@@ -4,7 +4,7 @@ Donate link: http://goo.gl/CbIp5
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrage, reorder, management, manage, admin
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 
 Change the page order with quick and easy drag and drop.
 
@@ -41,6 +41,11 @@ For theme developers, there's a filter hook that lets you set the maximum number
 3. Post status labels with support for custom statuses.
 
 == Changelog ==
+
+= 0.1.4 =
+* Added French translation by Stéphane Le Roy
+* Calls the_title filter for compatibility with qTranslate (patch by Stéphane Le Roy)
+* Style corrections for Wordpress 3.2
 
 = 0.1.3 =
 * Updated nestedSortable from 1.3.3 to 1.3.4: Fixes a problem with elements sometimes getting kicked out of the ol element.
