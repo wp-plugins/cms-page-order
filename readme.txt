@@ -28,6 +28,7 @@ For theme developers, there's a filter hook that lets you set the maximum number
 
 * English
 * Swedish
+* French (thanks to Stéphane Le Roy)
 
 == Installation ==
 
