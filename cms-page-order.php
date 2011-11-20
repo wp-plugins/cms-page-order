@@ -23,7 +23,7 @@ License: Public Domain
 		
 */
 
-define( 'CMSPO_VERSION', '0.1.4' );
+define( 'CMSPO_VERSION', '0.2' );
 define( 'CMSPO_URL', WP_PLUGIN_URL . '/cms-page-order/' );
 
 add_action( 'wp_ajax_save_tree', 'cmspo_ajax_save_tree' );
