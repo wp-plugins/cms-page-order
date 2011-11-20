@@ -1,10 +1,9 @@
 === CMS Page Order ===
-Contributors: bergius
-Donate link: http://goo.gl/CbIp5
+Contributors: billerickson
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrange, reorder, management, manage, admin
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 0.1.4
+Stable tag: 0.2
 
 Change the page order with quick and easy drag and drop.
 
@@ -14,13 +13,14 @@ Adds the ability to rearrange the pages with drag and drop.
 
 The plugin resembles [CMS Tree Page View](http://wordpress.org/extend/plugins/cms-tree-page-view/) in many ways, but is designed to look as native as possible, to be used in client projects. There is no plugin branding or donate button. Just pure functionality.
 
-For theme developers, there's a filter hook that lets you set the maximum number of levels pages can be nested in. See the PHP file for details about this.
+For theme developers, there's a filter hook that lets you set the maximum number of levels pages can be nested in. There's also a filter to [specify the post types](https://gist.github.com/1380344) this applies to. See the PHP file for details about this.
 
 #### In Short:
 
 * Quick and easy drag and drop for rearranging of pages
 * Actions: View, edit, trash and publish (drafts and pending pages)
 * Set the maximum number of nesting levels
+* Set the applicable post types
 * Native looking
 * [WPML](http://wordpress.org/extend/plugins/sitepress-multilingual-cms/) support
 
@@ -42,6 +42,9 @@ For theme developers, there's a filter hook that lets you set the maximum number
 3. Post status labels with support for custom statuses.
 
 == Changelog ==
+
+= 0.2 = 
+* Added support for custom post types. Use 'cmspo_post_types' filter. See: https://gist.github.com/1380344
 
 = 0.1.4 =
 * Added French translation by Stéphane Le Roy

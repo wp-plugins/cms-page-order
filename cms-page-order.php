@@ -3,9 +3,9 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.1.4
-Author: Tobias Bergius
-Author URI: http://tobiasbergius.se/
+Version: 0.2
+Author: Bill Erickson
+Author URI: http://www.billerickson.net
 License: Public Domain
 */
 /*
@@ -36,8 +36,11 @@ add_action( 'admin_head', 'cmspo_admin_head' );
 /** Setup Page, Styles and Scripts */
 function cmspo_admin_menu() {
 	load_plugin_textdomain( 'cms-page-order', false, '/cms-page-order/locale/');
-	$page = add_submenu_page( 'edit.php?post_type=page', __( 'Page Order', 'cms-page-order' ), __( 'Page Order', 'cms-page-order' ), 'edit_pages', 'order', 'cmspo_menu_order_page' );
-	add_action( 'admin_print_styles-' . $page, 'cmspo_print_styles' );
+	$post_types = apply_filters( 'cmspo_post_types', array( 'page' ) );
+	foreach( $post_types as $post_type ) {
+		$page = add_submenu_page( 'edit.php?post_type=' . $post_type, __( 'Page Order', 'cms-page-order' ), __( 'Page Order', 'cms-page-order' ), 'edit_pages', 'order-' . $post_type, 'cmspo_menu_order_page' );
+		add_action( 'admin_print_styles-' . $page, 'cmspo_print_styles' );
+	}
 	
 	$help = '<p>'.__( 'Rearrange the pages by dragging and dropping.', 'cms-page-order' );
 	if ( ( $max_levels = apply_filters( 'cmspo_max_levels', 0 ) - 1 ) && $max_levels > 0 )
@@ -176,7 +179,8 @@ function cmspo_menu_order_page() { ?>
 			<?php
 				printf( _n( 'Item moved to the Trash.', '%s items moved to the Trash.', $_REQUEST['trashed'] ), number_format_i18n( $_REQUEST['trashed'] ) );
 				$ids = isset($_REQUEST['ids']) ? $_REQUEST['ids'] : 0;
-				echo ' <a href="' . esc_url( wp_nonce_url( "edit.php?post_type=page&doaction=undo&action=untrash&ids=$ids", "bulk-posts" ) ) . '">' . __('Undo') . '</a><br />';
+				$post_type = esc_attr( $_GET['post_type'] );
+				echo ' <a href="' . esc_url( wp_nonce_url( "edit.php?post_type=$post_type&doaction=undo&action=untrash&ids=$ids", "bulk-posts" ) ) . '">' . __('Undo') . '</a><br />';
 				unset($_REQUEST['trashed']);
 			?>
 		</p></div>
@@ -225,11 +229,12 @@ function cmspo_icl_switcher() {
 		GROUP BY t.language_code
 		");
 
+	$post_type = esc_attr( $_GET['post_type'] );
 	foreach ( $res as $r ) {
 		if ( $r->code == ICL_LANGUAGE_CODE )
 			$langs[] = '<span class="po-sel">'.$r->name.' <span class="po-count">('.$r->count.')</span>';
 		else
-			$langs[] = '<span><a href="?post_type=page&page=order&lang='.$r->code.'">'.$r->name.'</a> <span class="po-count">('.$r->count.')</span>';
+			$langs[] = '<span><a href="?post_type=' . $post_type . '&page=order&lang='.$r->code.'">'.$r->name.'</a> <span class="po-count">('.$r->count.')</span>';
 	}
 	echo implode( ' | </span>', $langs ) . '</span>';
 }
@@ -243,8 +248,9 @@ function cmspo_get_user_option($option) {
 
 function cmspo_list_pages($args = null, $count = false) {
 	// no array in post_status until 3.2
+	$post_type = esc_attr( $_GET['post_type'] );
 	$defaults = array(
-		'post_type'		=> 'page',
+		'post_type'		=> $post_type,
 		'posts_per_page'	=> -1,
 		'orderby'			=> 'menu_order',
 		'order'				=> 'ASC',
@@ -351,8 +357,9 @@ class PO_Walker extends Walker_Page {
 				elseif ( in_array($state, array('draft', 'pending', 'future')) )
 					$title = __( 'Publish page', 'cms-page-order' );
 				
+				$post_type = esc_attr( $_GET['post_type'] );				
 				if ( in_array( $state, array( 'draft', 'pending', 'future', 'private', 'password' ) ) )
-					$action_url = wp_nonce_url( '?post_type=page&page=order&post='.$page->ID.'&action=remove_label&state='.$state, 'cms-page-order' );
+					$action_url = wp_nonce_url( '?post_type=' . $post_type. '&page=order&post='.$page->ID.'&action=remove_label&state='.$state, 'cms-page-order' );
 					if ( $state == 'private' && !current_user_can( 'edit_private_pages' ) )
 						$action_url = null;
 				else
