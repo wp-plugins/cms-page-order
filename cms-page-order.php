@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.2
+Version: 0.3
 Author: Bill Erickson
 Author URI: http://www.billerickson.net
 License: Public Domain
@@ -14,6 +14,10 @@ License: Public Domain
 	
 	You can use the following filters to customize the page list:
 	
+	* cmspo_post_types
+		What post types the Page Order is available on
+		Default: page
+		
 	* cmspo_max_levels
 		The number of levels pages can be nested.
 	
@@ -23,7 +27,7 @@ License: Public Domain
 		
 */
 
-define( 'CMSPO_VERSION', '0.2' );
+define( 'CMSPO_VERSION', '0.3' );
 define( 'CMSPO_URL', WP_PLUGIN_URL . '/cms-page-order/' );
 
 add_action( 'wp_ajax_save_tree', 'cmspo_ajax_save_tree' );
@@ -35,22 +39,54 @@ add_action( 'admin_head', 'cmspo_admin_head' );
 
 /** Setup Page, Styles and Scripts */
 function cmspo_admin_menu() {
-	load_plugin_textdomain( 'cms-page-order', false, '/cms-page-order/locale/');
+
+	// Only add the page if user can edit pages
+	if( !current_user_can( 'edit_pages' ) )
+		return;
+	
+	// Load Translations
+	load_plugin_textdomain( 'cms-page-order', false, dirname( plugin_basename( __FILE__ ) ) . '/locale/');
+	
+	// Add Page Order to each post type that can be edited
 	$post_types = apply_filters( 'cmspo_post_types', array( 'page' ) );
 	foreach( $post_types as $post_type ) {
-		$page = add_submenu_page( 'edit.php?post_type=' . $post_type, __( 'Page Order', 'cms-page-order' ), __( 'Page Order', 'cms-page-order' ), 'edit_pages', 'order-' . $post_type, 'cmspo_menu_order_page' );
-		add_action( 'admin_print_styles-' . $page, 'cmspo_print_styles' );
-	}
 	
-	$help = '<p>'.__( 'Rearrange the pages by dragging and dropping.', 'cms-page-order' );
-	if ( ( $max_levels = apply_filters( 'cmspo_max_levels', 0 ) - 1 ) && $max_levels > 0 )
-		$help .= ' '.sprintf( _n( 'You can have one submenu.', 'You can have %d sets of submenus.', $max_levels ), $max_levels );
-	$help .= '</p>';
-	add_contextual_help( $page, $help );
+		// Add subpage
+		$page = add_submenu_page( 'edit.php?post_type=' . $post_type, __( 'Page Order', 'cms-page-order' ), __( 'Page Order', 'cms-page-order' ), 'edit_pages', 'order-' . $post_type, 'cmspo_menu_order_page' );
+		
+		// Add scripts
+		if( $page ) 
+			add_action( 'admin_print_styles-' . $page, 'cmspo_print_styles' );
+		
+		// Add contextual help
+		if( $page ) 
+			add_action( 'load-' . $page, 'cmspo_help_tab' );
+	}
+
 }
 function cmspo_print_styles() {
 	wp_enqueue_style( 'cmspo_stylesheet' );
 }
+
+/**
+ * Contextual Help
+ * @link http://wpdevel.wordpress.com/2011/12/06/help-and-screen-api-changes-in-3-3/
+ *
+ */
+function cmspo_help_tab() {
+    
+	$help = '<p>'.__( 'Rearrange the pages by dragging and dropping.', 'cms-page-order' );
+	if ( ( $max_levels = apply_filters( 'cmspo_max_levels', 0 ) - 1 ) && $max_levels > 0 )
+		$help .= ' '.sprintf( _n( 'You can have one submenu.', 'You can have %d sets of submenus.', $max_levels ), $max_levels );
+
+    $screen = get_current_screen();
+    $screen->add_help_tab( array(
+        'id'      => 'cms-page-order-help', 
+        'title'   => __( 'Ordering Instructions', 'cms-page-order' ),
+        'content' => $help,
+    ) );
+}
+
 function cmspo_admin_init() {
 	wp_enqueue_script( 'jquery-ui-sortable', '', array('jquery'), false );
 	wp_enqueue_script( 'jquery-ui-effects', '', array('jquery', 'jquery-ui'), false );

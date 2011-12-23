@@ -3,7 +3,7 @@ Contributors: billerickson
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrange, reorder, management, manage, admin
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 0.2
+Stable tag: 0.3
 
 Change the page order with quick and easy drag and drop.
 
@@ -42,6 +42,10 @@ For theme developers, there's a filter hook that lets you set the maximum number
 3. Post status labels with support for custom statuses.
 
 == Changelog ==
+
+= 0.3 =
+* Rebuilt the contextual help to work with WordPress 3.3
+* Added user capability check, so code only loads if user can edit pages.
 
 = 0.2 = 
 * Added support for custom post types. Use 'cmspo_post_types' filter. See: https://gist.github.com/1380344
