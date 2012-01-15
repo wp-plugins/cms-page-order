@@ -13,7 +13,22 @@ Adds the ability to rearrange the pages with drag and drop.
 
 The plugin resembles [CMS Tree Page View](http://wordpress.org/extend/plugins/cms-tree-page-view/) in many ways, but is designed to look as native as possible, to be used in client projects. There is no plugin branding or donate button. Just pure functionality.
 
-For theme developers, there's a filter hook that lets you set the maximum number of levels pages can be nested in. There's also a filter to [specify the post types](https://gist.github.com/1380344) this applies to. See the PHP file for details about this.
+For theme developers, there's quite a few filters in place for customizing:
+
+`cmspo_post_types`
+Specify the post types the plugin applies to ([example](http://www.billerickson.net/code/change-post-types-cms-page-order/))
+
+`cmspo_max_levels`
+The number of levels pages can be nested.
+
+`cmspo_post_statuses`
+The post statuses to show. Default: all (including custom statuses), except trash, auto-draft and inherit
+
+`cmspo_page_label`
+The label for the subpage in the admin menu ([example](http://www.billerickson.net/code/cms-page-order-customize-page-label/))
+
+`the_title`
+Standard WP filter, but can be used to customize the page names([example](http://www.billerickson.net/code/add-taxonomy-to-page-names-cms-page-order/))
 
 #### In Short:
 
@@ -42,6 +57,10 @@ For theme developers, there's a filter hook that lets you set the maximum number
 3. Post status labels with support for custom statuses.
 
 == Changelog ==
+
+= 0.3.1 =
+* Added 'cmspo_page_label' filter for controlling the page label.
+* Updated readme with more information on available filters
 
 = 0.3 =
 * Rebuilt the contextual help to work with WordPress 3.3

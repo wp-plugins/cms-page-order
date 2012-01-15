@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.3
+Version: 0.3.1
 Author: Bill Erickson
 Author URI: http://www.billerickson.net
 License: Public Domain
@@ -24,6 +24,10 @@ License: Public Domain
 	* cmspo_post_statuses
 		The post statuses to show.
 		Default: all (including custom statuses), except trash, auto-draft and inherit
+
+	* cmspo_page_label
+		The label for the subpage
+		Default: Page Order
 		
 */
 
@@ -52,7 +56,7 @@ function cmspo_admin_menu() {
 	foreach( $post_types as $post_type ) {
 	
 		// Add subpage
-		$page = add_submenu_page( 'edit.php?post_type=' . $post_type, __( 'Page Order', 'cms-page-order' ), __( 'Page Order', 'cms-page-order' ), 'edit_pages', 'order-' . $post_type, 'cmspo_menu_order_page' );
+		$page = add_submenu_page( 'edit.php?post_type=' . $post_type, apply_filters( 'cmspo_page_label', __( 'Page Order', 'cms-page-order' ), $post_type ), apply_filters( 'cmspo_page_label', __( 'Page Order', 'cms-page-order' ), $post_type ), 'edit_pages', 'order-' . $post_type, 'cmspo_menu_order_page' );
 		
 		// Add scripts
 		if( $page ) 
@@ -206,16 +210,17 @@ function cmspo_ajax_remove_label() {
 
 
 /** The HTML Page */
-function cmspo_menu_order_page() { ?>
+function cmspo_menu_order_page() {
+	$post_type = esc_attr( $_GET['post_type'] );
+ ?>
 <div class="wrap">
 	<div id="icon-edit-pages" class="icon32"></div> 
-	<h2><?php _e('Page Order', 'cms-page-order') ?></h2>
+	<h2><?php echo apply_filters( 'cmspo_page_label', __('Page Order', 'cms-page-order'), $post_type ); ?></h2>
 <?php if ( isset($_REQUEST['trashed']) && (int) $_REQUEST['trashed'] ) : ?>
 		<div id="message" class="updated"><p>
 			<?php
 				printf( _n( 'Item moved to the Trash.', '%s items moved to the Trash.', $_REQUEST['trashed'] ), number_format_i18n( $_REQUEST['trashed'] ) );
 				$ids = isset($_REQUEST['ids']) ? $_REQUEST['ids'] : 0;
-				$post_type = esc_attr( $_GET['post_type'] );
 				echo ' <a href="' . esc_url( wp_nonce_url( "edit.php?post_type=$post_type&doaction=undo&action=untrash&ids=$ids", "bulk-posts" ) ) . '">' . __('Undo') . '</a><br />';
 				unset($_REQUEST['trashed']);
 			?>
