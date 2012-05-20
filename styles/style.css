@@ -8,7 +8,7 @@
 #cmspo-pages li div {
 	background: url(images/page.png) no-repeat 5px 4px;
 	padding-left: 21px;
-	z-index: 999;
+	z-index: 123;
 }
 #cmspo-pages li { position: relative; line-height: 21px; }
 
@@ -156,7 +156,7 @@
 .cmspo-toggle  {
 	display: block;
 	position: absolute;
-	z-index: 9999;
+	z-index: 124;
 	cursor: default;
 	padding: 2px;
 	left: -10px;
