@@ -58,6 +58,9 @@ Standard WP filter, but can be used to customize the page names([example](http:/
 
 == Changelog ==
 
+= 0.3.2 = 
+* Added italian translation
+
 = 0.3.1 =
 * Added 'cmspo_page_label' filter for controlling the page label.
 * Updated readme with more information on available filters
