@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.3.1
+Version: 0.3.2
 Author: Bill Erickson
 Author URI: http://www.billerickson.net
 License: Public Domain
