@@ -2,8 +2,8 @@
 Contributors: billerickson
 Tags: page, pages, posts, order, cms, drag-and-drop, rearrange, reorder, management, manage, admin
 Requires at least: 3.1
-Tested up to: 3.3.2
-Stable tag: 0.3.1
+Tested up to: 3.4.1
+Stable tag: 0.3.3
 
 Change the page order with quick and easy drag and drop.
 
@@ -60,6 +60,7 @@ Standard WP filter, but can be used to customize the page names([example](http:/
 
 = 0.3.2 = 
 * Added italian translation
+* Added support for WP Multisite
 
 = 0.3.1 =
 * Added 'cmspo_page_label' filter for controlling the page label.

@@ -275,7 +275,7 @@ function cmspo_icl_switcher() {
 		if ( $r->code == ICL_LANGUAGE_CODE )
 			$langs[] = '<span class="po-sel">'.$r->name.' <span class="po-count">('.$r->count.')</span>';
 		else
-			$langs[] = '<span><a href="?post_type=' . $post_type . '&page=order&lang='.$r->code.'">'.$r->name.'</a> <span class="po-count">('.$r->count.')</span>';
+			$langs[] = '<span><a href="' . network_admin_url( add_query_arg( array( 'post_type' => $post_type, 'page' => 'order-page', 'lang' => $r->code ), 'edit.php' ) ) . '">'.$r->name.'</a> <span class="po-count">('.$r->count.')</span>';
 	}
 	echo implode( ' | </span>', $langs ) . '</span>';
 }
