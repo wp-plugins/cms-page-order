@@ -60,7 +60,7 @@ Standard WP filter, but can be used to customize the page names([example](http:/
 
 = 0.3.2 = 
 * Added italian translation
-* Added support for WP Multisite
+* Added support for WP Multisite, thanks benhuson
 
 = 0.3.1 =
 * Added 'cmspo_page_label' filter for controlling the page label.
