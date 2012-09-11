@@ -3,7 +3,7 @@
 Plugin Name: CMS Page Order
 Plugin URI: http://wordpress.org/extend/plugins/cms-page-order/
 Description: Change the page order with quick and easy drag and drop.
-Version: 0.3.2
+Version: 0.3.3
 Author: Bill Erickson
 Author URI: http://www.billerickson.net
 License: Public Domain
@@ -31,7 +31,7 @@ License: Public Domain
 		
 */
 
-define( 'CMSPO_VERSION', '0.3.2' );
+define( 'CMSPO_VERSION', '0.3.3' );
 define( 'CMSPO_URL', WP_PLUGIN_URL . '/cms-page-order/' );
 
 add_action( 'wp_ajax_save_tree', 'cmspo_ajax_save_tree' );
@@ -59,17 +59,30 @@ function cmspo_admin_menu() {
 		$page = add_submenu_page( 'edit.php?post_type=' . $post_type, apply_filters( 'cmspo_page_label', __( 'Page Order', 'cms-page-order' ), $post_type ), apply_filters( 'cmspo_page_label', __( 'Page Order', 'cms-page-order' ), $post_type ), 'edit_pages', 'order-' . $post_type, 'cmspo_menu_order_page' );
 		
 		// Add scripts
-		if( $page ) 
+		if( $page ) {
+			
+			// Scripts
+			add_action( 'admin_print_scripts-' . $page, 'cmspo_print_scripts' );
+			
+			// Styles
 			add_action( 'admin_print_styles-' . $page, 'cmspo_print_styles' );
-		
-		// Add contextual help
-		if( $page ) 
+
+			// Add contextual help
 			add_action( 'load-' . $page, 'cmspo_help_tab' );
+		}
+
 	}
 
 }
 function cmspo_print_styles() {
 	wp_enqueue_style( 'cmspo_stylesheet' );
+}
+
+function cmspo_print_scripts() {
+	wp_enqueue_script( 'jquery-ui-sortable', '', array('jquery'), false );
+	wp_enqueue_script( 'jquery-ui-effects', '', array('jquery', 'jquery-ui'), false );
+	wp_enqueue_script( 'jquery-ui-nestedsortable', CMSPO_URL . 'scripts/jquery.ui.nestedSortable-1.3.4.min.js', array('jquery', 'jquery-ui-sortable') );
+	wp_enqueue_script( 'cms-page-order', CMSPO_URL . 'scripts/cms-page-order.js', array('jquery', 'jquery-ui-sortable', 'jquery-ui-nestedsortable'), CMSPO_VERSION );
 }
 
 /**
@@ -92,10 +105,6 @@ function cmspo_help_tab() {
 }
 
 function cmspo_admin_init() {
-	wp_enqueue_script( 'jquery-ui-sortable', '', array('jquery'), false );
-	wp_enqueue_script( 'jquery-ui-effects', '', array('jquery', 'jquery-ui'), false );
-	wp_enqueue_script( 'jquery-ui-nestedsortable', CMSPO_URL . 'scripts/jquery.ui.nestedSortable-1.3.4.min.js', array('jquery', 'jquery-ui-sortable') );
-	wp_enqueue_script( 'cms-page-order', CMSPO_URL . 'scripts/cms-page-order.js', array('jquery', 'jquery-ui-sortable', 'jquery-ui-nestedsortable'), CMSPO_VERSION );
 	wp_register_style( 'cmspo_stylesheet', CMSPO_URL . 'styles/style.css', '', CMSPO_VERSION );
 	
 	$strings = array(
