@@ -23,7 +23,9 @@ Change the page order with quick and easy drag and drop.
 * Italian
 * French (thanks to Stéphane Le Roy)
 
-[Documentation](https://github.com/billerickson/cms-page-order/wiki) | [Support Forum](https://github.com/billerickson/cms-page-order/issues)
+[Documentation](https://github.com/billerickson/cms-page-order/wiki)
+
+**No support will be provided by the developer**
 
 
 == Installation ==
